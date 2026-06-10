@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSE 298 CBT</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="watermark">
+    Designed by SOPE
+</div>
+
+<h1>GSE 298 CBT TEST</h1>
+
+<h2 id="timer">20:00</h2>
+
+<div id="quiz-container"></div>
+
+<button onclick="previousQuestion()">Previous</button>
+<button onclick="nextQuestion()">Next</button>
+<button onclick="submitQuiz()">Submit</button>
+
+<div id="result"></div>
+
+<script>
+
+const questions = [
+
+{
+question:"Ijesaland is located in which state?",
+options:["Oyo","Ondo","Osun","Ekiti"],
+answer:2
+},
+
+{
+question:"Ijesaland is located in the ______ part of Nigeria.",
+options:["North-East","South-West","South-East","North-West"],
+answer:1
+},
+
+{
+question:"The headquarters and cultural capital of Ijesaland is:",
+options:["Osogbo","Ibadan","Ilesa","Ile-Ife"],
+answer:2
+},
+
+{
+question:"The traditional ruler of Ijesaland bears the title:",
+options:["Alaafin","Ooni","Owa Obokun Adimula","Awujale"],
+answer:2
+},
+
+{
+question:"How many Local Government Areas make up Ijesaland?",
+options:["4","5","6","7"],
+answer:2
+},
+
+{
+question:"Which of the following is NOT an LGA in Ijesaland?",
+options:["Ilesa East","Atakumosa West","Oriade","Egbeda"],
+answer:3
+},
+
+{
+question:"Ijesaland lies approximately how many kilometers from Ibadan?",
+options:["50 km","70 km","90–93 km","120 km"],
+answer:2
+},
+
+{
+question:"The people of Ijesaland are predominantly:",
+options:["Hausa","Yoruba","Igbo","Fulani"],
+answer:1
+},
+
+{
+question:"The approximate latitude of Ijesaland is:",
+options:["4°N–5°N","5°N–6°N","7°45'N–8°15'N","10°N–12°N"],
+answer:2
+},
+
+{
+question:"The longitude range of Ijesaland is:",
+options:["2°E–3°E","4°15'E–4°45'E","6°E–7°E","8°E–9°E"],
+answer:1
+},
+
+{
+question:"Ijesaland is bounded by ______ to the east.",
+options:["Oyo","Ekiti","Lagos","Ogun"],
+answer:1
+},
+
+{
+question:"Ijesaland occupies an important position within the:",
+options:["Hausa region","Igbo region","Yoruba region","Niger Delta"],
+answer:2
+},
+
+{
+question:"The estimated area of Ijesaland is approximately:",
+options:["500 km²","1,000 km²","1,500 km²","2,500 km²"],
+answer:2
+},
+
+{
+question:"The headquarters of Oriade LGA is:",
+options:["Ibokun","Iperindo","Ijebu-Jesa","Osu"],
+answer:2
+},
+
+{
+question:"The headquarters of Obokun LGA is:",
+options:["Ilesa","Ibokun","Iperindo","Esa-Oke"],
+answer:1
+},
+
+{
+question:"Ijesaland is known for its:",
+options:["Desert vegetation","Rugged terrain","Mangrove forests","Tundra"],
+answer:1
+},
+
+{
+question:"The dominant landform in Ijesaland is:",
+options:["Coastal plain","Plateau","Delta","Desert"],
+answer:1
+},
+
+{
+question:"The major plateau in Ijesaland is:",
+options:["Jos Plateau","Mambilla Plateau","Ilesa Plateau","Udi Plateau"],
+answer:2
+},
+
+{
+question:"Elevation in Ijesaland ranges between:",
+options:["50–100m","100–200m","300–600m","700–900m"],
+answer:2
+},
+
+{
+question:"Oke-Eso is an example of:",
+options:["River","Hill","Forest","Valley"],
+answer:1
+}
+
+];
+
+let currentQuestion = 0;
+let userAnswers = [];
+
+function loadQuestion() {
+
+let q = questions[currentQuestion];
+
+let html = `
+<h3>Question ${currentQuestion + 1} of ${questions.length}</h3>
+<p>${q.question}</p>
+`;
+
+q.options.forEach((option,index)=>{
+
+html += `
+<label>
+<input type="radio"
+name="answer"
+value="${index}"
+${userAnswers[currentQuestion] == index ? "checked" : ""}
+onclick="userAnswers[${currentQuestion}] = ${index}">
+${option}
+</label><br><br>
+`;
+
+});
+
+document.getElementById("quiz-container").innerHTML = html;
+}
+
+function nextQuestion(){
+
+if(currentQuestion < questions.length - 1){
+
+currentQuestion++;
+loadQuestion();
+
+}
+
+}
+
+function previousQuestion(){
+
+if(currentQuestion > 0){
+
+currentQuestion--;
+loadQuestion();
+
+}
+
+}
+
+function submitQuiz(){
+
+let score = 0;
+let corrections = "";
+
+questions.forEach((q,index)=>{
+
+if(userAnswers[index] == q.answer){
+
+score++;
+
+}else{
+
+corrections += `
+<p>
+Question ${index+1}: Correct Answer is
+<b>${q.options[q.answer]}</b>
+</p>
+`;
+
+}
+
+});
+
+document.getElementById("result").innerHTML =
+`
+<h2>Score: ${score}/${questions.length}</h2>
+${corrections}
+`;
+
+}
+
+let timeLeft = 1200;
+
+let timer = setInterval(function(){
+
+let minutes = Math.floor(timeLeft/60);
+let seconds = timeLeft%60;
+
+document.getElementById("timer").innerHTML =
+minutes + ":" + (seconds < 10 ? "0"+seconds : seconds);
+
+timeLeft--;
+
+if(timeLeft < 0){
+
+clearInterval(timer);
+submitQuiz();
+
+}
+
+},1000);
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>
